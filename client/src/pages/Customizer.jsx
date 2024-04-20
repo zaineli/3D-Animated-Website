@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSnapshot } from 'valtio';
 
-import config from '../config/config';
 import state from '../store';
 import { download } from '../assets';
 import { downloadCanvasToImage, reader } from '../config/helpers';
@@ -11,12 +10,26 @@ import { fadeAnimation, slideAnimation } from '../config/motion';
 import { AIPicker, ColorPicker, CustomButton, FilePicker, Tab } from '../components';
 
 const Customizer = () => {
+
+  async function query(data) {
+    const response = await fetch("https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0", {
+        headers: {
+            Authorization: "Bearer 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"
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+    const result = await response.blob();
+    return result;
+}
+  
   const snap = useSnapshot(state);
 
   const [file, setFile] = useState('');
 
   const [prompt, setPrompt] = useState('');
   const [generatingImg, setGeneratingImg] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
 
   const [activeEditorTab, setActiveEditorTab] = useState("");
   const [activeFilterTab, setActiveFilterTab] = useState({
@@ -48,24 +61,26 @@ const Customizer = () => {
   }
 
   const handleSubmit = async (type) => {
-    if(!prompt) return alert("Please enter a prompt");
-
+    if (!prompt) return alert("Please enter a prompt");
+  
     try {
       setGeneratingImg(true);
-
-      const response = await fetch('http://localhost:8080/api/v1/dalle', {
+  
+      const response = await fetch('https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0', {
         method: 'POST',
         headers: {
+          'Authorization': 'Bearer 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',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          prompt,
+          inputs: prompt,
         })
-      })
-
-      const data = await response.json();
-
-      handleDecals(type, `data:image/png;base64,${data.photo}`)
+      });
+  
+      const resultBlob = await response.blob();
+      const imageURL = URL.createObjectURL(resultBlob);
+  
+      handleDecals(type, imageURL);
     } catch (error) {
       alert(error)
     } finally {
@@ -73,6 +88,7 @@ const Customizer = () => {
       setActiveEditorTab("");
     }
   }
+  
 
   const handleDecals = (type, result) => {
     const decalType = DecalTypes[type];
