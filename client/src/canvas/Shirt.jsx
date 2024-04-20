@@ -1,7 +1,5 @@
-import React from 'react'
-import { easing } from 'maath';
+import React, { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
-import { useFrame } from '@react-three/fiber';
 import { Decal, useGLTF, useTexture } from '@react-three/drei';
 
 import state from '../store';
@@ -13,7 +11,10 @@ const Shirt = () => {
   const logoTexture = useTexture(snap.logoDecal);
   const fullTexture = useTexture(snap.fullDecal);
 
-  useFrame((state, delta) => easing.dampC(materials.lambert1.color, snap.color, 0.25, delta));
+  useEffect(() => {
+    // Update the color of the material when state.color changes
+    materials.lambert1.color.set(state.color);
+  }, [snap.color]); // Trigger when state.color changes
 
   const stateString = JSON.stringify(snap);
 
@@ -36,7 +37,7 @@ const Shirt = () => {
         )}
 
         {snap.isLogoTexture && (
-          <Decal 
+          <Decal
             position={[0, 0.04, 0.15]}
             rotation={[0, 0, 0]}
             scale={0.15}
@@ -48,7 +49,7 @@ const Shirt = () => {
         )}
       </mesh>
     </group>
-  )
-}
+  );
+};
 
-export default Shirt
+export default Shirt;
