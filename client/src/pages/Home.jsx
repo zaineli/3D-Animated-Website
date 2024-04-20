@@ -18,11 +18,13 @@ const Home = () => {
       {snap.intro && (
         <motion.section className="home" {...slideAnimation('left')}>
           <motion.header {...slideAnimation("down")}>
-            <img 
+          <h1 class="text-2xl font-bold text-center text-gray-800">Shirt Studio</h1>
+
+            {/* <img 
               src='./threejs.png'
               alt="logo"
               className="w-8 h-8 object-contain"
-            />
+            /> */}
           </motion.header>
 
           <motion.div className="home-content" {...headContainerAnimation}>
@@ -36,7 +38,7 @@ const Home = () => {
               className="flex flex-col gap-5"
             >
               <p className="max-w-md font-normal text-gray-600 text-base">
-              Create your unique and exclusive shirt with our brand-new 3D customization tool. <strong>Unleash your imagination</strong>{" "} and define your own style.
+              Design Your Signature Shirt with Our Cutting-Edge 3D Customization Tool. <strong>Express Your Unique Style</strong>{" "} and Let Your Imagination Run Wild!
               </p>
 
               <CustomButton 
