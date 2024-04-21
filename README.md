@@ -2,6 +2,10 @@
 
 Shirt Studio is an innovative web application that empowers users to design and customize their own shirts in stunning 3D. Leveraging the latest in web technologies and generative AI, Shirt Studio offers a seamless and immersive experience for users to unleash their creativity and craft personalized garments like never before.
 
+![Alt text](client/public/1.png)
+![Alt text](client/public/2.png)
+![Alt text](client/public/3.png)
+
 ## Getting Started:
 
 To run the Shirt Studio project locally, follow these steps:
